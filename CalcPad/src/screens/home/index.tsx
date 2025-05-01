@@ -112,32 +112,39 @@ export default function Home() {
         }
     };
 
+    // @ts-ignore: Unused parameter 'e'
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        console.log(e);
         const canvas = canvasRef.current;
         if (canvas) {
             canvas.style.background = 'black';
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 ctx.beginPath();
+                // Use e directly without any changes
                 ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
                 setIsDrawing(true);
             }
         }
     };
+    
     const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
         if (!isDrawing) {
             return;
         }
+        console.log(e);
         const canvas = canvasRef.current;
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 ctx.strokeStyle = color;
+                // Use e directly without any changes
                 ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
                 ctx.stroke();
             }
         }
     };
+    
     const stopDrawing = () => {
         setIsDrawing(false);
     };  
@@ -148,7 +155,7 @@ export default function Home() {
         if (canvas) {
             const response = await axios({
                 method: 'post',
-                url: `${import.meta.env.VITE_API_URL}/calculate`,
+                url: `https://mathcalculator-backend.onrender.com/calculate`,
                 data: {
                     image: canvas.toDataURL('image/png'),
                     dict_of_vars: dictOfVars
@@ -236,7 +243,7 @@ export default function Home() {
                 <Draggable
                     key={index}
                     defaultPosition={latexPosition}
-                    onStop={(e, data) => setLatexPosition({ x: data.x, y: data.y })}
+                    onStop={(_, data) => setLatexPosition({ x: data.x, y: data.y })}
                 >
                     <div className="absolute p-2 text-white rounded shadow-md">
                         <div className="latex-content">{latex}</div>
